@@ -14,6 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import type { PriceSanityCheckOutput } from '@/ai/flows/price-sanity-check';
 import { Lightbulb, TriangleAlert } from "lucide-react";
+import { Button } from "@/components/ui/button"; // Added import
 
 interface PriceSanityCheckAlertProps {
   isOpen: boolean;
