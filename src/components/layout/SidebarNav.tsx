@@ -26,21 +26,22 @@ export function SidebarNav() {
     <SidebarMenu>
       {navItems.map((item) => (
         <SidebarMenuItem key={item.label}>
-          <Link href={item.href} asChild>
-            <SidebarMenuButton
-              className={cn(
-                "w-full justify-start",
-                pathname === item.href
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "hover:bg-sidebar-accent/50"
-              )}
-              isActive={pathname === item.href}
-              tooltip={{ children: item.label, side: "right", align: "center" }}
-            >
+          <SidebarMenuButton
+            asChild
+            className={cn(
+              "w-full justify-start",
+              pathname === item.href
+                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                : "hover:bg-sidebar-accent/50"
+            )}
+            isActive={pathname === item.href}
+            tooltip={{ children: item.label, side: "right", align: "center" }}
+          >
+            <Link href={item.href}>
               <item.icon className="h-5 w-5" />
               <span className="truncate">{item.label}</span>
-            </SidebarMenuButton>
-          </Link>
+            </Link>
+          </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
     </SidebarMenu>
