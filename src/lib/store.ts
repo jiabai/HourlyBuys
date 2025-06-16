@@ -73,7 +73,7 @@ export const useAppStore = create<AppState>()(
       }
     }),
     {
-      name: 'power-per-hour-storage', 
+      name: 'hourlybuys-storage', 
       storage: createJSONStorage(() => localStorage), 
       // Custom serialization/deserialization if needed, e.g., for icons (store names, not components)
       // For simplicity, icons are re-assigned on load if needed, or use string keys for icons
@@ -89,7 +89,7 @@ export const useAppStore = create<AppState>()(
         // A proper solution for products would involve custom hydration logic for icons.
         // For now, products will reset to default on page load if we fully persist them with icons.
         // Or, only persist product data without icons, and re-apply icons based on ID/name on load.
-        // Let's just persist the basic data and re-apply default icons. Custom products would need a default icon.
+        // Let's just persist the basic data and re-apply default icons.
         // For the scope of this task, let's keep it simple and assume products are reset or have string-based icon lookup.
         // The current partializer excludes products. We can manage product persistence manually in useEffect if icons are an issue.
         // Actually, it's better to persist products but handle icons carefully. Let's include products but acknowledge icon issue.

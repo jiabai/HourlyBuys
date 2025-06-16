@@ -30,7 +30,7 @@ export default function WelcomePage() {
       </main>
 
       <footer className="absolute bottom-6 text-sm text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} PowerPerHour. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} HourlyBuys. All rights reserved.</p>
       </footer>
     </div>
   );

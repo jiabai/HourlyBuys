@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'PowerPerHour - Purchasing Power Calculator',
+  title: 'HourlyBuys - Purchasing Power Calculator',
   description: 'Calculate how much your work hour can buy in essential goods.',
 };
 

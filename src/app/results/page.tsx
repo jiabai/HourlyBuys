@@ -75,7 +75,9 @@ export default function ResultsPage() {
       try {
         await navigator.share({
           title: 'My Purchasing Power',
-          text: `With an hourly wage of ¥${hourlyWage?.toFixed(2)}, I can buy: ${results.slice(0,3).map(r => `${r.name} x ${isFinite(r.quantityPurchasable) ? r.quantityPurchasable.toFixed(1) : 'Many'} ${r.unit.split('/')[1] || ''}`).join(', ')}... Check out PowerPerHour!`,
+          text: `With an hourly wage of ¥${hourlyWage?.toFixed(2)}, I can buy: ${results.slice(0,3).map(r => 
+            `${r.name} × ${isFinite(r.quantityPurchasable) ? r.quantityPurchasable.toFixed(1) : 'Many'} ${r.unit.split('/')[1] || ''}`
+          ).join(', ')}... Check out HourlyBuys!`,
           url: window.location.href,
         });
         toast({ title: "Shared!", description: "Results shared successfully." });
