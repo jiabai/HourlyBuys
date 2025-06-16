@@ -21,3 +21,10 @@ export interface HistoryEntry {
   results: CalculationResult[];
   sanityCheckAnomalies?: PriceSanityCheckOutput['anomalousPrices'];
 }
+
+export interface UserProfile {
+  username: string;
+  email: string;
+  bio?: string;
+  avatarUrl?: string;
+}

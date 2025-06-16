@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { User, MapPin, History, Info, HelpCircle, MessageSquare, LogOut } from "lucide-react";
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
+import { useAppStore } from '@/lib/store';
 
 interface SettingsItemProps {
   icon: React.ElementType;
@@ -32,11 +33,12 @@ const SettingsItem: React.FC<SettingsItemProps> = ({ icon: Icon, label, href, on
     }
     return <Link href={href}>{content}</Link>;
   }
-  return <div onClick={onClick}>{content}</div>;
+  return <div onClick={onClick} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && onClick?.()}>{content}</div>;
 };
 
 export default function SettingsPage() {
   const { toast } = useToast();
+  const { userProfile } = useAppStore();
 
   const handlePlaceholderClick = (featureName: string) => {
     toast({
@@ -52,13 +54,13 @@ export default function SettingsPage() {
         <Card className="shadow-lg">
           <CardHeader className="items-center text-center">
             <Avatar className="w-24 h-24 mb-4 ring-2 ring-primary ring-offset-2 ring-offset-background">
-              <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint="avatar profile" />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarImage src={userProfile.avatarUrl || "https://placehold.co/100x100.png"} alt={userProfile.username} data-ai-hint="avatar profile" />
+              <AvatarFallback>{userProfile.username?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl">Username</CardTitle>
+            <CardTitle className="text-2xl">{userProfile.username || 'Username'}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <SettingsItem icon={User} label="My Profile" onClick={() => handlePlaceholderClick("My Profile")} />
+            <SettingsItem icon={User} label="My Profile" href="/profile" />
             <SettingsItem icon={MapPin} label="Region Settings" onClick={() => handlePlaceholderClick("Region Settings")} />
             <Separator />
             <SettingsItem icon={History} label="History Records" href="/history" />
