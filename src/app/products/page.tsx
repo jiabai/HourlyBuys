@@ -8,7 +8,7 @@ import { ProductFormDialog } from "@/components/products/ProductFormDialog";
 import { ProductList } from "@/components/products/ProductList";
 import { useAppStore } from "@/lib/store";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, AlertTriangle } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { priceSanityCheck, PriceSanityCheckInput, PriceSanityCheckOutput } from '@/ai/flows/price-sanity-check';
@@ -60,6 +60,7 @@ export default function ProductManagementPage() {
     }
 
     setIsSanityCheckLoading(true);
+    setSanityCheckAnomalies(null); // Clear previous anomalies
     try {
       const sanityCheckInput: PriceSanityCheckInput = {
         products: products.map(p => ({
@@ -78,10 +79,18 @@ export default function ProductManagementPage() {
       }
     } catch (error) {
       console.error("Price sanity check failed:", error);
+      let toastDescription = "Failed to perform price sanity check. Proceeding without it.";
+      if (error instanceof Error) {
+        const errorMessage = error.message.toLowerCase();
+        if (errorMessage.includes('503') || errorMessage.includes('service unavailable') || errorMessage.includes('overloaded') || errorMessage.includes('model is overloaded')) {
+          toastDescription = "The AI price checker is temporarily unavailable (it might be overloaded). You can try again in a few moments, or proceed without this check for now.";
+        }
+      }
       toast({
-        title: "Error",
-        description: "Failed to perform price sanity check. Proceeding without it.",
+        title: "Price Check Issue",
+        description: toastDescription,
         variant: "destructive",
+        duration: 7000, // Give more time to read potentially longer message
       });
       router.push("/salary"); // Proceed even if AI fails, with a message
     } finally {
