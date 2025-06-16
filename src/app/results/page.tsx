@@ -75,13 +75,21 @@ export default function ResultsPage() {
       try {
         await navigator.share({
           title: 'My Purchasing Power',
-          text: `With an hourly wage of ¥${hourlyWage?.toFixed(2)}, I can buy: ${results.slice(0,3).map(r => `${r.name} x ${r.quantityPurchasable.toFixed(1)} ${r.unit.split('/')[1] || ''}`).join(', ')}... Check out PowerPerHour!`,
+          text: `With an hourly wage of ¥${hourlyWage?.toFixed(2)}, I can buy: ${results.slice(0,3).map(r => `${r.name} x ${isFinite(r.quantityPurchasable) ? r.quantityPurchasable.toFixed(1) : 'Many'} ${r.unit.split('/')[1] || ''}`).join(', ')}... Check out PowerPerHour!`,
           url: window.location.href,
         });
         toast({ title: "Shared!", description: "Results shared successfully." });
       } catch (error) {
         console.error('Error sharing:', error);
-        toast({ title: "Share Failed", description: "Could not share results.", variant: "destructive" });
+        let description = "Could not share results. Please try again or copy the page URL.";
+        if (error instanceof Error) {
+          if (error.message.toLowerCase().includes('permission denied')) {
+            description = "Sharing permission was denied. This might be due to browser/environment settings. You can try copying the page URL manually.";
+          } else if (error.name === 'AbortError') {
+            description = "Sharing was cancelled by you.";
+          }
+        }
+        toast({ title: "Share Failed", description, variant: "destructive" });
       }
     } else {
       toast({ title: "Share Not Supported", description: "Web Share API is not supported in your browser. Try copying the page URL." });
@@ -144,11 +152,15 @@ export default function ResultsPage() {
             <CardTitle>Actions</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button variant="outline" onClick={() => router.push('/products')}>
-              <ArrowLeft className="mr-2 h-4 w-4" /> Re-set Prices
+            <Button variant="outline" asChild>
+              <Link href="/products">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Re-set Prices
+              </Link>
             </Button>
-            <Button variant="outline" onClick={() => router.push('/salary')}>
-              <RefreshCcw className="mr-2 h-4 w-4" /> Recalculate Wage
+            <Button variant="outline" asChild>
+              <Link href="/salary">
+                <RefreshCcw className="mr-2 h-4 w-4" /> Recalculate Wage
+              </Link>
             </Button>
             <Button variant="outline" onClick={handleSaveAsImage}>
               <Download className="mr-2 h-4 w-4" /> Save as Image
