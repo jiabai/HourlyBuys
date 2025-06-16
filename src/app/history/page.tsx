@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -7,7 +8,7 @@ import { useAppStore } from "@/lib/store";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from 'date-fns';
-import { Trash2, AlertTriangle } from "lucide-react";
+import { Trash2, AlertTriangle, History } from "lucide-react";
 import { HistoryDetailDialog } from "@/components/history/HistoryDetailDialog";
 import {
   AlertDialog,
