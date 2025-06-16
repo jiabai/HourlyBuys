@@ -16,16 +16,17 @@ export default function WelcomePage() {
           Do you know how much in essential goods your one hour of work can buy?
         </h2>
         
-        <Link href="/products" asChild>
-          <Button
-            size="lg"
-            className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out"
-            aria-label="Start Calculation"
-          >
+        <Button
+          asChild
+          size="lg"
+          className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out"
+          aria-label="Start Calculation"
+        >
+          <Link href="/products">
             Start Calculation
             <ArrowRight className="ml-2 h-6 w-6" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </main>
 
       <footer className="absolute bottom-6 text-sm text-muted-foreground">
