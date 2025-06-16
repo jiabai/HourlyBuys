@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -37,20 +38,22 @@ export async function priceSanityCheck(input: PriceSanityCheckInput): Promise<Pr
   return priceSanityCheckFlow(input);
 }
 
-const getMarketPrice = ai.defineTool({
-  name: 'getMarketPrice',
-  description: 'Returns the current market price of a product.',
-  inputSchema: z.object({
-    productName: z.string().describe('The name of the product.'),
-    unit: z.string().describe('The unit of the product (e.g., CNY/jin).'),
-  }),
-  outputSchema: z.number().describe('The current market price of the product.'),
+const getMarketPrice = ai.defineTool(
+  {
+    name: 'getMarketPrice',
+    description: 'Returns the current market price of a product.',
+    inputSchema: z.object({
+      productName: z.string().describe('The name of the product.'),
+      unit: z.string().describe('The unit of the product (e.g., CNY/jin).'),
+    }),
+    outputSchema: z.number().describe('The current market price of the product.'),
+  },
   async (input) => {
     // Dummy implementation - replace with actual price retrieval logic
     // This could involve calling an external API or querying a database
     return Math.random() * 10; // Replace with actual logic
-  },
-});
+  }
+);
 
 const priceSanityCheckPrompt = ai.definePrompt({
   name: 'priceSanityCheckPrompt',
