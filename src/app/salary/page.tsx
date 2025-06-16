@@ -105,11 +105,11 @@ export default function SalaryInputPage() {
             )}
           </CardContent>
           <CardFooter className="flex justify-between mt-4 pt-4 border-t">
-            <Link href="/products" asChild>
-              <Button variant="outline">
+            <Button variant="outline" asChild>
+              <Link href="/products">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Previous Step
-              </Button>
-            </Link>
+              </Link>
+            </Button>
             <Button onClick={handleNextStep} disabled={confirmedWage === null} className="bg-accent hover:bg-accent/90">
               Next Step → View Results
               <ArrowRight className="ml-2 h-4 w-4" />

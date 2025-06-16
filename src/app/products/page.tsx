@@ -105,11 +105,11 @@ export default function ProductManagementPage() {
         <ProductList />
 
         <div className="flex justify-between items-center mt-8 pt-4 border-t">
-          <Link href="/" asChild>
-            <Button variant="outline">
+          <Button variant="outline" asChild>
+            <Link href="/">
               <ArrowLeft className="mr-2 h-4 w-4" /> Previous Step
-            </Button>
-          </Link>
+            </Link>
+          </Button>
           <Button onClick={handleNextStep} disabled={isSanityCheckLoading}>
             {isSanityCheckLoading ? "Checking Prices..." : "Next Step → Calculate Salary"}
             {!isSanityCheckLoading && <ArrowRight className="ml-2 h-4 w-4" />}
