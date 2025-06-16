@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { AppLogo } from "@/components/AppLogo";
 import Link from "next/link";
@@ -15,7 +16,7 @@ export default function WelcomePage() {
           Do you know how much in essential goods your one hour of work can buy?
         </h2>
         
-        <Link href="/products" passHref>
+        <Link href="/products" asChild>
           <Button
             size="lg"
             className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out"

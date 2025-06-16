@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -157,7 +158,7 @@ export default function ResultsPage() {
             </Button>
           </CardContent>
           <CardFooter className="border-t pt-4 mt-4 flex flex-col sm:flex-row justify-center gap-4">
-             <Link href="/history" passHref>
+             <Link href="/history" asChild>
               <Button variant="secondary" className="w-full sm:w-auto">
                 <History className="mr-2 h-4 w-4" /> View History
               </Button>

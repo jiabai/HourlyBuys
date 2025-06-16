@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -104,7 +105,7 @@ export default function ProductManagementPage() {
         <ProductList />
 
         <div className="flex justify-between items-center mt-8 pt-4 border-t">
-          <Link href="/" passHref>
+          <Link href="/" asChild>
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" /> Previous Step
             </Button>

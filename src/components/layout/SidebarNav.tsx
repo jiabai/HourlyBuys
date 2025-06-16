@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -25,9 +26,8 @@ export function SidebarNav() {
     <SidebarMenu>
       {navItems.map((item) => (
         <SidebarMenuItem key={item.label}>
-          <Link href={item.href} passHref legacyBehavior>
+          <Link href={item.href} asChild>
             <SidebarMenuButton
-              asChild={false} // Ensure it's a button or acts like one
               className={cn(
                 "w-full justify-start",
                 pathname === item.href

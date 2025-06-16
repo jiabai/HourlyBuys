@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -104,7 +105,7 @@ export default function SalaryInputPage() {
             )}
           </CardContent>
           <CardFooter className="flex justify-between mt-4 pt-4 border-t">
-            <Link href="/products" passHref>
+            <Link href="/products" asChild>
               <Button variant="outline">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Previous Step
               </Button>
