@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -23,7 +24,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({ icon: Icon, label, href, on
   const content = (
     <div className="flex items-center space-x-3 p-3 hover:bg-muted/50 rounded-md transition-colors cursor-pointer">
       <Icon className="h-5 w-5 text-primary" />
-      <span>{label}</span>
+      <span className="text-sm md:text-base">{label}</span>
     </div>
   );
 
@@ -50,16 +51,16 @@ export default function SettingsPage() {
 
   return (
     <AppLayout title="Settings / More">
-      <div className="max-w-2xl mx-auto space-y-8">
+      <div className="w-full max-w-2xl mx-auto space-y-8">
         <Card className="shadow-lg">
           <CardHeader className="items-center text-center">
-            <Avatar className="w-24 h-24 mb-4 ring-2 ring-primary ring-offset-2 ring-offset-background">
+            <Avatar className="w-20 h-20 md:w-24 md:h-24 mb-4 ring-2 ring-primary ring-offset-2 ring-offset-background">
               <AvatarImage src={userProfile.avatarUrl || "https://placehold.co/100x100.png"} alt={userProfile.username} data-ai-hint="avatar profile" />
               <AvatarFallback>{userProfile.username?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
             </Avatar>
-            <CardTitle className="text-2xl">{userProfile.username || 'Username'}</CardTitle>
+            <CardTitle className="text-xl md:text-2xl">{userProfile.username || 'Username'}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-1 md:space-y-2">
             <SettingsItem icon={User} label="My Profile" href="/profile" />
             <SettingsItem icon={MapPin} label="Region Settings" onClick={() => handlePlaceholderClick("Region Settings")} />
             <Separator />

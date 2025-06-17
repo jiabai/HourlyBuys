@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -67,17 +68,17 @@ export default function ProfilePage() {
 
   return (
     <AppLayout title="My Profile">
-      <div className="max-w-2xl mx-auto">
+      <div className="w-full max-w-2xl mx-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle>Edit Your Profile</CardTitle>
+                <CardTitle className="text-xl md:text-2xl">Edit Your Profile</CardTitle>
                 <CardDescription>Update your personal information below.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex flex-col items-center space-y-4">
-                  <Avatar className="w-32 h-32 ring-2 ring-primary ring-offset-2 ring-offset-background">
+                  <Avatar className="w-24 h-24 md:w-32 md:h-32 ring-2 ring-primary ring-offset-2 ring-offset-background">
                     <AvatarImage 
                       src={form.watch('avatarUrl') || userProfile.avatarUrl || "https://placehold.co/128x128.png"} 
                       alt={userProfile.username}
@@ -142,13 +143,13 @@ export default function ProfilePage() {
                   )}
                 />
               </CardContent>
-              <CardFooter className="flex justify-between border-t pt-6 mt-6">
-                <Button variant="outline" asChild>
+              <CardFooter className="flex flex-col sm:flex-row justify-between border-t pt-6 mt-6 gap-3">
+                <Button variant="outline" asChild className="w-full sm:w-auto">
                   <Link href="/settings">
-                    <ArrowLeft className="mr-2 h-4 w-4" /> Back to Settings
+                    <ArrowLeft /> Back to Settings
                   </Link>
                 </Button>
-                <Button type="submit">Save Changes</Button>
+                <Button type="submit" className="w-full sm:w-auto">Save Changes</Button>
               </CardFooter>
             </Card>
           </form>

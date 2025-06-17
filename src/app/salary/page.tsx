@@ -65,10 +65,10 @@ export default function SalaryInputPage() {
 
   return (
     <AppLayout title="Input Salary & Location">
-      <div className="max-w-lg mx-auto">
+      <div className="w-full max-w-lg mx-auto">
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle>Enter Your Details</CardTitle>
+            <CardTitle className="text-xl md:text-2xl">Enter Your Details</CardTitle>
             <CardDescription>
               Provide your after-tax hourly wage in CNY and your current location. This is the first step.
             </CardDescription>
@@ -105,10 +105,10 @@ export default function SalaryInputPage() {
             </div>
 
             {hourlyWage !== null && hourlyWage > 0 && (
-              <div className="p-4 bg-accent/10 border border-accent/30 rounded-lg text-center text-accent-foreground shadow">
-                <CheckCircle className="inline-block mr-2 h-6 w-6 text-accent" />
-                <span className="text-lg font-medium">
-                  Hourly wage: <strong className="text-xl">¥{hourlyWage.toFixed(2)}/hour</strong>
+              <div className="p-3 md:p-4 bg-accent/10 border border-accent/30 rounded-lg text-center text-accent-foreground shadow">
+                <CheckCircle className="inline-block mr-2 h-5 md:h-6 w-5 md:w-6 text-accent" />
+                <span className="text-md md:text-lg font-medium">
+                  Hourly wage: <strong className="text-lg md:text-xl">¥{hourlyWage.toFixed(2)}/hour</strong>
                 </span>
                 {location && (
                    <span className="block text-sm mt-1">
@@ -118,11 +118,12 @@ export default function SalaryInputPage() {
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex justify-end mt-4 pt-4 border-t">
+          <CardFooter className="flex flex-col sm:flex-row justify-end mt-4 pt-4 border-t">
             <Button 
               onClick={handleNextStep} 
               disabled={hourlyWage === null || hourlyWage <= 0} 
-              className="bg-accent hover:bg-accent/90"
+              className="bg-accent hover:bg-accent/90 w-full sm:w-auto text-base"
+              size="lg"
             >
               Next Step → Set Product Prices
               <ArrowRight className="ml-2 h-4 w-4" />

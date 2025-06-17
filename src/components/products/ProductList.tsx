@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -39,11 +40,11 @@ export function ProductList() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[50px]"></TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead>Unit</TableHead>
-                <TableHead className="w-[150px]">Current Price</TableHead>
-                <TableHead className="text-right w-[100px]">Actions</TableHead>
+                <TableHead className="w-[40px] md:w-[50px] p-2 md:p-4"></TableHead>
+                <TableHead className="p-2 md:p-4">Product</TableHead>
+                <TableHead className="p-2 md:p-4">Unit</TableHead>
+                <TableHead className="w-[120px] md:w-[150px] p-2 md:p-4">Current Price</TableHead>
+                <TableHead className="text-right w-[80px] md:w-[100px] p-2 md:p-4">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,30 +59,30 @@ export function ProductList() {
                 const IconComponent = product.icon || iconMap[product.name.replace(/\s/g, '')] || iconMap.Default;
                 return (
                   <TableRow key={product.id}>
-                    <TableCell>
-                      <IconComponent className="h-6 w-6 text-primary" />
+                    <TableCell className="p-2 md:p-4">
+                      <IconComponent className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                     </TableCell>
-                    <TableCell className="font-medium">{product.name}</TableCell>
-                    <TableCell>{product.unit}</TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium p-2 md:p-4">{product.name}</TableCell>
+                    <TableCell className="p-2 md:p-4">{product.unit}</TableCell>
+                    <TableCell className="p-2 md:p-4">
                       <Input
                         type="number"
                         value={product.price}
                         onChange={(e) => handlePriceChange(product.id, e.target.value)}
                         min="0"
                         step="0.01"
-                        className="h-9"
+                        className="h-9 text-sm md:text-base"
                         aria-label={`Price for ${product.name}`}
                       />
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right p-2 md:p-4">
                       {product.isCustom && (
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => removeProduct(product.id)}
                           aria-label={`Remove ${product.name}`}
-                          className="text-destructive hover:text-destructive/80"
+                          className="text-destructive hover:text-destructive/80 h-8 w-8 md:h-9 md:w-9"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

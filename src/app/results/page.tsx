@@ -15,7 +15,7 @@ import { PurchasingPowerChart } from "@/components/results/PurchasingPowerChart"
 import Link from "next/link";
 
 export default function ResultsPage() {
-  const { products, hourlyWage, addHistoryEntry, resetApp } = useAppStore();
+  const { products, hourlyWage, addHistoryEntry, resetApp, location } = useAppStore();
   const router = useRouter();
   const { toast } = useToast();
   const [results, setResults] = React.useState<CalculationResult[]>([]);
@@ -39,9 +39,11 @@ export default function ResultsPage() {
     }));
     setResults(calculatedResults);
     
-    addHistoryEntry({ hourlyWage, products, results: calculatedResults });
+    const { sanityCheckAnomalies: currentSanityCheckAnomalies } = useAppStore.getState().history[0] || {};
+    addHistoryEntry({ hourlyWage, products, results: calculatedResults, location, sanityCheckAnomalies: currentSanityCheckAnomalies });
 
-  }, [hourlyWage, products, addHistoryEntry, router, toast]);
+
+  }, [hourlyWage, products, addHistoryEntry, router, toast, location]);
 
   const bestValueProduct = React.useMemo(() => {
     if (!results || results.length === 0) return null;
@@ -97,49 +99,52 @@ export default function ResultsPage() {
 
   const handleResetAndStartOver = () => {
     resetApp();
-    router.push('/salary'); // Updated to redirect to /salary
+    router.push('/salary'); 
     toast({ title: "Application Reset", description: "You can start a new calculation now."});
   }
 
   return (
     <AppLayout> 
-      <div className="purple-pink-gradient text-primary-foreground p-6 md:p-8 rounded-lg shadow-md mb-6 md:mb-8 text-center">
-        <h1 className="text-2xl md:text-3xl font-bold">Your Purchasing Power Analysis</h1>
+      <div className="purple-pink-gradient text-primary-foreground p-4 md:p-6 rounded-lg shadow-md mb-6 text-center">
+        <h1 className="text-xl md:text-3xl font-bold">Your Purchasing Power Analysis</h1>
         {hourlyWage !== null && (
-          <p className="text-base md:text-lg mt-1">
+          <p className="text-sm md:text-lg mt-1">
             Based on your hourly wage of <strong className="font-semibold">¥{hourlyWage.toFixed(2)}</strong>/hour
+            {location && ` in ${location}`}
           </p>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 md:mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
         <div className="md:col-span-2">
           <PurchasingPowerChart data={results} chartRef={chartRef} />
         </div>
         <div className="md:col-span-1">
           <Card className="shadow-md">
             <CardHeader>
-              <CardTitle className="text-xl">Quick Summary</CardTitle>
+              <CardTitle className="text-lg md:text-xl">Quick Summary</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm md:text-base">
-              <div className="p-3.5 rounded-md flex justify-between items-center" style={{ backgroundColor: 'hsl(var(--quick-summary-hourly-wage-bg))' }}>
+            <CardContent className="space-y-3 text-sm">
+              <div className="p-3 rounded-md flex justify-between items-center" style={{ backgroundColor: 'hsl(var(--quick-summary-hourly-wage-bg))' }}>
                 <span className="text-card-foreground/80">Hourly Wage:</span>
                 <strong className="text-card-foreground">¥{hourlyWage?.toFixed(2) || 'N/A'}</strong>
               </div>
-              <div className="p-3.5 rounded-md flex justify-between items-center" style={{ backgroundColor: 'hsl(var(--quick-summary-industry-bg))' }}>
-                <span className="text-card-foreground/80">Industry:</span>
-                <span className="font-medium" style={{color: "hsl(var(--chart-3))"}}>Not specified</span>
-              </div>
-              <div className="p-3.5 rounded-md flex justify-between items-center" style={{ backgroundColor: 'hsl(var(--quick-summary-products-bg))' }}>
+              {location && (
+                <div className="p-3 rounded-md flex justify-between items-center" style={{ backgroundColor: 'hsl(var(--quick-summary-industry-bg))' }}>
+                  <span className="text-card-foreground/80">Location:</span>
+                  <span className="font-medium" style={{color: "hsl(var(--chart-3))"}}>{location}</span>
+                </div>
+              )}
+              <div className="p-3 rounded-md flex justify-between items-center" style={{ backgroundColor: 'hsl(var(--quick-summary-products-bg))' }}>
                 <span className="text-card-foreground/80">Products Analyzed:</span>
                 <strong className="text-card-foreground">{products.length} items</strong>
               </div>
               {bestValueProduct && (
-                <div className="p-3.5 rounded-md" style={{ backgroundColor: 'hsl(var(--quick-summary-best-value-bg))' }}>
-                  <p className="font-semibold mb-1" style={{color: 'hsl(25 80% 50%)'}}>
-                    <TrendingUp className="inline-block mr-1.5 h-5 w-5" />Best Value:
+                <div className="p-3 rounded-md" style={{ backgroundColor: 'hsl(var(--quick-summary-best-value-bg))' }}>
+                  <p className="font-semibold mb-1 text-sm" style={{color: 'hsl(25 80% 50%)'}}>
+                    <TrendingUp className="inline-block mr-1.5 h-4 w-4 md:h-5 md:w-5" />Best Value:
                   </p>
-                  <p className="text-card-foreground/90">
+                  <p className="text-card-foreground/90 text-xs md:text-sm">
                     You can buy {isFinite(bestValueProduct.quantityPurchasable) ? bestValueProduct.quantityPurchasable.toFixed(1) : 'an abundance of'} {bestValueProduct.unit.split('/')[1] || bestValueProduct.name.toLowerCase()} of <span className="font-medium">{bestValueProduct.name}</span>.
                   </p>
                 </div>
@@ -149,9 +154,9 @@ export default function ResultsPage() {
         </div>
       </div>
 
-      <Card className="shadow-md mb-6 md:mb-8">
+      <Card className="shadow-md mb-6">
         <CardHeader>
-          <CardTitle className="text-xl">Detailed Breakdown</CardTitle>
+          <CardTitle className="text-lg md:text-xl">Detailed Breakdown</CardTitle>
           <CardDescription>What one hour of your work can buy.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -159,10 +164,10 @@ export default function ResultsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>Unit</TableHead>
-                  <TableHead className="text-right">Current Price</TableHead>
-                  <TableHead className="text-right">Quantity You Can Buy</TableHead>
+                  <TableHead className="p-2 md:p-4">Product Name</TableHead>
+                  <TableHead className="p-2 md:p-4">Unit</TableHead>
+                  <TableHead className="text-right p-2 md:p-4">Current Price</TableHead>
+                  <TableHead className="text-right p-2 md:p-4">Quantity You Can Buy</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -171,10 +176,10 @@ export default function ResultsPage() {
                     key={item.id} 
                     className={index % 2 !== 0 ? 'bg-[hsl(var(--table-row-alt-bg))]' : ''}
                   >
-                    <TableCell className="font-medium">{item.name}</TableCell>
-                    <TableCell>{item.unit}</TableCell>
-                    <TableCell className="text-right">¥{item.price.toFixed(2)}</TableCell>
-                    <TableCell className="text-right font-semibold text-primary">
+                    <TableCell className="font-medium p-2 md:p-4">{item.name}</TableCell>
+                    <TableCell className="p-2 md:p-4">{item.unit}</TableCell>
+                    <TableCell className="text-right p-2 md:p-4">¥{item.price.toFixed(2)}</TableCell>
+                    <TableCell className="text-right font-semibold text-primary p-2 md:p-4">
                       {isFinite(item.quantityPurchasable) 
                         ? `${item.quantityPurchasable.toFixed(2)} ${item.unit.split('/')[1] || ''}` 
                         : (item.price === 0 ? '∞ (Free!)' : 'N/A')}
@@ -189,27 +194,27 @@ export default function ResultsPage() {
 
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle className="text-xl">Actions</CardTitle>
+          <CardTitle className="text-lg md:text-xl">Actions</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Button variant="outline" asChild>
+        <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          <Button variant="outline" asChild className="w-full">
             <Link href="/products">
               <ArrowLeft /> Re-set Prices
             </Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="w-full">
             <Link href="/salary">
-              <RefreshCcw /> Recalculate Wage
+              <RefreshCcw /> Recalculate
             </Link>
           </Button>
-          <Button variant="outline" onClick={handleSaveAsImage}>
+          <Button variant="outline" onClick={handleSaveAsImage} className="w-full">
             <Download /> Save as Image
           </Button>
-          <Button variant="outline" onClick={handleShare}>
+          <Button variant="outline" onClick={handleShare} className="w-full">
             <Share2 /> Share Results
           </Button>
         </CardContent>
-        <CardFooter className="border-t pt-4 mt-4 flex flex-col sm:flex-row justify-center gap-4">
+        <CardFooter className="border-t pt-4 mt-4 flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
            <Button variant="secondary" className="w-full sm:w-auto" asChild>
             <Link href="/history">
               <History /> View History

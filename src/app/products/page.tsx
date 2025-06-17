@@ -8,7 +8,7 @@ import { ProductFormDialog } from "@/components/products/ProductFormDialog";
 import { ProductList } from "@/components/products/ProductList";
 import { useAppStore } from "@/lib/store";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { priceSanityCheck, PriceSanityCheckInput, PriceSanityCheckOutput } from '@/ai/flows/price-sanity-check';
@@ -111,15 +111,16 @@ export default function ProductManagementPage() {
         
         <ProductList />
 
-        <div className="flex justify-between items-center mt-8 pt-4 border-t">
-          <Button variant="outline" asChild>
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-8 pt-4 border-t gap-4">
+          <Button variant="outline" asChild className="w-full sm:w-auto">
             <Link href="/salary">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Previous Step
+              <ArrowLeft /> Previous Step
             </Link>
           </Button>
-          <Button onClick={handleNextStep} disabled={isSanityCheckLoading}>
+          <Button onClick={handleNextStep} disabled={isSanityCheckLoading} className="w-full sm:w-auto">
+            {isSanityCheckLoading && <Loader2 className="animate-spin" />}
             {isSanityCheckLoading ? "Checking Prices..." : "Next Step → View Results"}
-            {!isSanityCheckLoading && <ArrowRight className="ml-2 h-4 w-4" />}
+            {!isSanityCheckLoading && <ArrowRight />}
           </Button>
         </div>
       </div>
