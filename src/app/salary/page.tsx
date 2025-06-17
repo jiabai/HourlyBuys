@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAppStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, CheckCircle, Coins, MapPin } from "lucide-react";
+import { ArrowRight, DollarSign, MapPin } from "lucide-react"; // Changed Coins to DollarSign
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -68,8 +68,6 @@ export default function SalaryInputPage() {
       title: "Feature in development",
       description: "Automatic location detection will be available soon.",
     });
-    // Placeholder: In a real app, you'd use navigator.geolocation here
-    // For now, let's just show the manual input if it was hidden.
     if (!showManualLocationInput) {
       setShowManualLocationInput(true);
     }
@@ -81,8 +79,7 @@ export default function SalaryInputPage() {
         {/* Custom Logo and Title */}
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full purple-pink-gradient shadow-md">
-            <Coins className="w-8 h-8 md:w-10 md:h-10 text-white opacity-90 transform -translate-x-1 -translate-y-1" />
-            <Coins className="w-8 h-8 md:w-10 md:h-10 text-white opacity-70 transform translate-x-1 translate-y-1 absolute" />
+            <DollarSign className="w-8 h-8 md:w-10 md:h-10 text-white opacity-90" /> 
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">
             Your Purchasing Power
@@ -172,4 +169,3 @@ export default function SalaryInputPage() {
     </AppLayout>
   );
 }
-
