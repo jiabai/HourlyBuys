@@ -70,7 +70,7 @@ export default function SalaryInputPage() {
           <CardHeader>
             <CardTitle className="text-xl md:text-2xl">Enter Your Details</CardTitle>
             <CardDescription>
-              Provide your after-tax hourly wage in CNY and your current location. This is the first step.
+              Do you know how many necessities can one hour of your work buy?
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
