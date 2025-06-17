@@ -40,7 +40,7 @@ export default function SalaryInputPage() {
       setHourlyWage(wage);
       toast({
         title: "Wage Updated",
-        description: `Your hourly wage is set to ¥${wage.toFixed(2)}/hour.`,
+        description: `Your after-tax hourly wage is set to ¥${wage.toFixed(2)}/hour.`,
       });
     }
   };
@@ -85,24 +85,24 @@ export default function SalaryInputPage() {
             <Coins className="w-8 h-8 md:w-10 md:h-10 text-white opacity-70 transform translate-x-1 translate-y-1 absolute" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-            你的购买力
+            Your Purchasing Power
           </h1>
         </div>
         <p className="text-sm md:text-base text-muted-foreground mb-8 text-center px-4">
-          你知道你一个小时的工作能换多少生活必需品吗?
+          Do you know how many necessities one hour of your work can buy?
         </p>
 
         <Card className="w-full shadow-xl">
           <CardContent className="pt-6 space-y-6">
             <div>
-              <Label htmlFor="location-info" className="text-sm font-medium text-muted-foreground">地域信息</Label>
+              <Label htmlFor="location-info" className="text-sm font-medium text-muted-foreground">Location Information</Label>
               <Button
                 variant="outline"
                 className="w-full mt-2 bg-muted/50 hover:bg-muted/70 text-foreground justify-start"
                 onClick={handleAutoLocation}
               >
                 <MapPin className="mr-2 h-4 w-4" />
-                自动获取当前位置
+                Auto-detect Current Location
               </Button>
               {!showManualLocationInput && (
                 <Button
@@ -110,16 +110,16 @@ export default function SalaryInputPage() {
                   className="text-sm mt-2 p-0 h-auto text-primary"
                   onClick={() => setShowManualLocationInput(true)}
                 >
-                  手动输入位置信息
+                  Manually Enter Location
                 </Button>
               )}
               {showManualLocationInput && (
                 <div className="mt-3 space-y-1">
-                   <Label htmlFor="manual-location" className="text-xs text-muted-foreground pl-1">手动输入位置:</Label>
+                   <Label htmlFor="manual-location" className="text-xs text-muted-foreground pl-1">Manual Location Input:</Label>
                    <Input
                     id="manual-location"
                     type="text"
-                    placeholder="例如: 上海 (e.g., Shanghai)"
+                    placeholder="e.g., Shanghai, London"
                     value={locationInputValue}
                     onChange={handleLocationInputChange}
                     className="text-base h-11"
@@ -130,7 +130,7 @@ export default function SalaryInputPage() {
 
             <div className="space-y-2">
               <Label htmlFor="hourly-wage" className="text-sm font-medium text-muted-foreground">
-                税后时薪 (单位: 元)
+                After-tax Hourly Wage (Unit: CNY)
               </Label>
               <Input
                 id="hourly-wage"
@@ -151,7 +151,7 @@ export default function SalaryInputPage() {
                 style={{ backgroundColor: 'hsl(var(--quick-summary-hourly-wage-bg))' }} 
               >
                 <span className="text-sm md:text-base font-medium" style={{color: 'hsl(145 50% 40%)'}}>
-                  您的税后时薪为: <strong className="text-base md:text-lg">¥{hourlyWage.toFixed(2)}/小时</strong>
+                  Your after-tax hourly wage is: <strong className="text-base md:text-lg">¥{hourlyWage.toFixed(2)}/hour</strong>
                 </span>
               </div>
             )}
@@ -163,7 +163,7 @@ export default function SalaryInputPage() {
               className="w-full bg-blue-600 hover:bg-blue-700 text-base text-white"
               size="lg"
             >
-              下一步 → 查看购买力 →
+              Next Step → View Purchasing Power →
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>
@@ -172,3 +172,4 @@ export default function SalaryInputPage() {
     </AppLayout>
   );
 }
+
