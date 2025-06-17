@@ -50,8 +50,8 @@ export default function ResultsPage() {
     
     if (purchasableProducts.length === 0) {
       const freeProducts = results.filter(r => r.price === 0);
-      if (freeProducts.length > 0) return freeProducts[0]; // If any free product, show that
-      return results.length > 0 ? results[0] : null; // Fallback: first product if nothing is "purchasable"
+      if (freeProducts.length > 0) return freeProducts[0]; 
+      return results.length > 0 ? results[0] : null; 
     }
     
     return purchasableProducts.reduce((best, current) => 
@@ -97,12 +97,12 @@ export default function ResultsPage() {
 
   const handleResetAndStartOver = () => {
     resetApp();
-    router.push('/');
+    router.push('/salary'); // Updated to redirect to /salary
     toast({ title: "Application Reset", description: "You can start a new calculation now."});
   }
 
   return (
-    <AppLayout> {/* Removed title prop, header banner will serve as title */}
+    <AppLayout> 
       <div className="purple-pink-gradient text-primary-foreground p-6 md:p-8 rounded-lg shadow-md mb-6 md:mb-8 text-center">
         <h1 className="text-2xl md:text-3xl font-bold">Your Purchasing Power Analysis</h1>
         {hourlyWage !== null && (

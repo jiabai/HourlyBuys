@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Settings, ListChecks, DollarSign, BarChart2, History, ShoppingBag } from "lucide-react";
+import { DollarSign, ListChecks, BarChart2, History, Settings } from "lucide-react"; // Updated icons
 import {
   SidebarMenu,
   SidebarMenuItem,
@@ -12,8 +12,8 @@ import {
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/products", label: "Products", icon: ListChecks },
   { href: "/salary", label: "Salary", icon: DollarSign },
+  { href: "/products", label: "Products", icon: ListChecks },
   { href: "/results", label: "Results", icon: BarChart2 },
   { href: "/history", label: "History", icon: History },
   { href: "/settings", label: "Settings", icon: Settings },
@@ -30,11 +30,11 @@ export function SidebarNav() {
             asChild
             className={cn(
               "w-full justify-start",
-              pathname === item.href
+              pathname === item.href || (pathname === '/' && item.href === '/salary') // Highlight Salary if on root
                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
                 : "hover:bg-sidebar-accent/50"
             )}
-            isActive={pathname === item.href}
+            isActive={pathname === item.href || (pathname === '/' && item.href === '/salary')}
             tooltip={{ children: item.label, side: "right", align: "center" }}
           >
             <Link href={item.href}>

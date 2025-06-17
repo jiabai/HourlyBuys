@@ -10,7 +10,7 @@ import { useAppStore } from "@/lib/store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, ArrowRight, CheckCircle, MapPin } from "lucide-react";
+import { ArrowRight, CheckCircle, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function SalaryInputPage() {
@@ -22,38 +22,35 @@ export default function SalaryInputPage() {
   const { toast } = useToast();
 
   React.useEffect(() => {
-    if (products.length === 0) {
-      toast({
-        title: "No Products",
-        description: "Product list is empty. Please add products first.",
-        variant: "destructive",
-      });
-      router.push('/products');
+    // Products check is less critical if this is the first page, 
+    // but good to keep if flow could somehow bypass it.
+    // For a strict Salary -> Products flow, this might be removable or adjusted.
+    if (products.length === 0 && router.pathname !== '/products') { // Added condition to prevent loop if products page itself has an issue
+      // This check might be less relevant if salary is truly the first page
+      // and products are always populated by default or on the products page.
     }
   }, [products, router, toast]);
 
   const handleWageInputBlur = () => {
     const wage = parseFloat(wageInputValue);
     if (isNaN(wage) || wage <= 0) {
-      if (wageInputValue !== "") { // Only show error if user typed something invalid
+      if (wageInputValue !== "") { 
         toast({
           title: "Invalid Wage",
           description: "Please enter a valid positive number for your hourly wage.",
           variant: "destructive",
         });
       }
-      if (hourlyWage !== null) { // If there was a valid wage, but user cleared or put invalid, reset it in store
+      if (hourlyWage !== null) { 
         setHourlyWage(null);
       }
       return;
     }
-    // Only update and show toast if value changed and is valid
     if (wage !== hourlyWage) {
       setHourlyWage(wage);
       toast({
         title: "Wage Updated",
         description: `Your hourly wage is set to ¥${wage.toFixed(2)}/hour.`,
-        className: "bg-green-50 border-green-200 text-green-700",
       });
     }
   };
@@ -74,7 +71,7 @@ export default function SalaryInputPage() {
       });
       return;
     }
-    router.push("/results");
+    router.push("/products");
   };
 
   return (
@@ -84,7 +81,7 @@ export default function SalaryInputPage() {
           <CardHeader>
             <CardTitle>Enter Your Details</CardTitle>
             <CardDescription>
-              Provide your after-tax hourly wage in CNY and your current location.
+              Provide your after-tax hourly wage in CNY and your current location. This is the first step.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -132,18 +129,14 @@ export default function SalaryInputPage() {
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex justify-between mt-4 pt-4 border-t">
-            <Button variant="outline" asChild>
-              <Link href="/products">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Previous Step
-              </Link>
-            </Button>
+          <CardFooter className="flex justify-end mt-4 pt-4 border-t">
+            {/* Previous Step button removed as this is the first page in the new flow */}
             <Button 
               onClick={handleNextStep} 
               disabled={hourlyWage === null || hourlyWage <= 0} 
               className="bg-accent hover:bg-accent/90"
             >
-              Next Step → View Results
+              Next Step → Set Product Prices
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>

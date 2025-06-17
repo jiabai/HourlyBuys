@@ -39,11 +39,10 @@ export default function ProductManagementPage() {
         title: "Price Updated",
         description: `Price for ${productName} updated to ¥${newPrice.toFixed(2)}.`,
       });
-      // Optionally, re-run sanity check or update the displayed anomalies
       const updatedAnomalies = sanityCheckAnomalies?.filter(a => a.productName !== productName) || null;
       setSanityCheckAnomalies(updatedAnomalies);
       if (updatedAnomalies && updatedAnomalies.length === 0) {
-        setIsAlertOpen(false); // Close alert if all anomalies resolved
+        setIsAlertOpen(false); 
       }
     }
   };
@@ -60,7 +59,7 @@ export default function ProductManagementPage() {
     }
 
     setIsSanityCheckLoading(true);
-    setSanityCheckAnomalies(null); // Clear previous anomalies
+    setSanityCheckAnomalies(null); 
     try {
       const sanityCheckInput: PriceSanityCheckInput = {
         products: products.map(p => ({
@@ -74,8 +73,7 @@ export default function ProductManagementPage() {
         setSanityCheckAnomalies(result.anomalousPrices);
         setIsAlertOpen(true);
       } else {
-        // No anomalies, proceed directly
-        router.push("/salary");
+        router.push("/results");
       }
     } catch (error) {
       console.error("Price sanity check failed:", error);
@@ -90,17 +88,17 @@ export default function ProductManagementPage() {
         title: "Price Check Issue",
         description: toastDescription,
         variant: "destructive",
-        duration: 7000, // Give more time to read potentially longer message
+        duration: 7000, 
       });
-      router.push("/salary"); // Proceed even if AI fails, with a message
+      router.push("/results"); 
     } finally {
       setIsSanityCheckLoading(false);
     }
   };
 
-  const proceedToSalaryPage = () => {
+  const proceedToResultsPage = () => {
     setIsAlertOpen(false);
-    router.push("/salary");
+    router.push("/results");
   };
 
 
@@ -115,12 +113,12 @@ export default function ProductManagementPage() {
 
         <div className="flex justify-between items-center mt-8 pt-4 border-t">
           <Button variant="outline" asChild>
-            <Link href="/">
+            <Link href="/salary">
               <ArrowLeft className="mr-2 h-4 w-4" /> Previous Step
             </Link>
           </Button>
           <Button onClick={handleNextStep} disabled={isSanityCheckLoading}>
-            {isSanityCheckLoading ? "Checking Prices..." : "Next Step → Calculate Salary"}
+            {isSanityCheckLoading ? "Checking Prices..." : "Next Step → View Results"}
             {!isSanityCheckLoading && <ArrowRight className="ml-2 h-4 w-4" />}
           </Button>
         </div>
@@ -130,7 +128,7 @@ export default function ProductManagementPage() {
           isOpen={isAlertOpen}
           onClose={() => setIsAlertOpen(false)}
           anomalies={sanityCheckAnomalies}
-          onProceed={proceedToSalaryPage}
+          onProceed={proceedToResultsPage}
           onUpdatePrice={handleUpdatePriceFromAlert}
         />
       )}
