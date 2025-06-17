@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { HistoryEntry } from "@/lib/types";
 import { format } from 'date-fns';
-import { Eye } from "lucide-react";
+import { Eye, MapPin } from "lucide-react"; // Added MapPin
 import { Badge } from "@/components/ui/badge";
 
 interface HistoryDetailDialogProps {
@@ -31,15 +31,25 @@ export function HistoryDetailDialog({ entry, children }: HistoryDetailDialogProp
           <DialogTitle>History Record Details</DialogTitle>
           <DialogDescription>
             Calculation from {format(new Date(entry.timestamp), "PPP p")}
+            {entry.location && ` in ${entry.location}`}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4 max-h-[70vh] overflow-y-auto">
-          <p><strong>Hourly Wage:</strong> ¥{entry.hourlyWage.toFixed(2)}</p>
-          <p><strong>Number of Products:</strong> {entry.products.length}</p>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+            <p><strong>Hourly Wage:</strong> ¥{entry.hourlyWage.toFixed(2)}</p>
+            {entry.location && (
+              <p className="flex items-center">
+                <MapPin className="mr-1.5 h-4 w-4 text-muted-foreground" />
+                <strong>Location:</strong> {entry.location}
+              </p>
+            )}
+            <p><strong>Products Analyzed:</strong> {entry.products.length}</p>
+          </div>
+
 
           {entry.sanityCheckAnomalies && entry.sanityCheckAnomalies.length > 0 && (
             <div className="my-4">
-              <h4 className="font-semibold mb-2">Price Sanity Check Notes:</h4>
+              <h4 className="font-semibold mb-2 text-base">Price Sanity Check Notes:</h4>
               <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
                 {entry.sanityCheckAnomalies.map(anomaly => (
                   <li key={anomaly.productName}>
@@ -50,7 +60,7 @@ export function HistoryDetailDialog({ entry, children }: HistoryDetailDialogProp
             </div>
           )}
           
-          <h4 className="font-semibold mt-4">Purchasing Power Results:</h4>
+          <h4 className="font-semibold mt-4 text-base">Purchasing Power Results:</h4>
           <Table>
             <TableHeader>
               <TableRow>

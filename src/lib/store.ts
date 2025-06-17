@@ -30,6 +30,8 @@ interface AppState {
   removeProduct: (id: string) => void;
   hourlyWage: number | null;
   setHourlyWage: (wage: number | null) => void;
+  location: string | null;
+  setLocation: (location: string | null) => void;
   history: HistoryEntry[];
   addHistoryEntry: (entryData: { hourlyWage: number; products: Product[], results: CalculationResult[], sanityCheckAnomalies?: PriceSanityCheckOutput['anomalousPrices'] }) => void;
   clearHistory: () => void;
@@ -63,11 +65,14 @@ export const useAppStore = create<AppState>()(
         })),
       hourlyWage: null,
       setHourlyWage: (wage) => set({ hourlyWage: wage }),
+      location: null,
+      setLocation: (location) => set({ location }),
       history: [],
       addHistoryEntry: (entryData) => {
         const newEntry: HistoryEntry = {
           id: crypto.randomUUID(),
           timestamp: Date.now(),
+          location: get().location, // Include location
           ...entryData,
         };
         set((state) => ({ history: [newEntry, ...state.history] }));
@@ -83,7 +88,7 @@ export const useAppStore = create<AppState>()(
           userProfile: { ...state.userProfile, ...profileUpdate },
         })),
       resetApp: () => {
-        set({ products: getDefaultProducts(), hourlyWage: null, userProfile: defaultUserProfile });
+        set({ products: getDefaultProducts(), hourlyWage: null, location: null, userProfile: defaultUserProfile });
       }
     }),
     {
@@ -104,6 +109,9 @@ export const useAppStore = create<AppState>()(
              // Ensure userProfile is initialized if not in storage
             if (!hydratedState.userProfile) {
               hydratedState.userProfile = defaultUserProfile;
+            }
+            if (hydratedState.location === undefined) {
+              hydratedState.location = null;
             }
           }
         }
@@ -148,4 +156,8 @@ useAppStore.subscribe(
 const initialUserProfile = useAppStore.getState().userProfile;
 if (!initialUserProfile || Object.keys(initialUserProfile).length === 0) {
   useAppStore.setState({ userProfile: defaultUserProfile });
+}
+const initialLocation = useAppStore.getState().location;
+if (initialLocation === undefined) {
+ useAppStore.setState({ location: null });
 }

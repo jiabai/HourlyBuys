@@ -20,6 +20,7 @@ export interface HistoryEntry {
   products: Product[];
   results: CalculationResult[];
   sanityCheckAnomalies?: PriceSanityCheckOutput['anomalousPrices'];
+  location?: string | null; // Added location
 }
 
 export interface UserProfile {
