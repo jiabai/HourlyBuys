@@ -1,3 +1,4 @@
+
 "use client";
 
 import { create } from 'zustand';
@@ -51,7 +52,7 @@ export const useAppStore = create<AppState>()(
           ...productData,
           id: crypto.randomUUID(),
           isCustom: true,
-          icon: ShoppingBasket, 
+          icon: ShoppingBasket,
         };
         set((state) => ({ products: [...state.products, newProduct] }));
       },
@@ -92,15 +93,15 @@ export const useAppStore = create<AppState>()(
       }
     }),
     {
-      name: 'hourlybuys-storage', 
-      storage: createJSONStorage(() => localStorage), 
+      name: 'hourlybuys-storage',
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         // Exclude products from persistence due to non-serializable icon components
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { products, ...rest } = state;
         return rest;
       },
-      onRehydrateStorage: (state) => {
+      onRehydrateStorage: () => { // This function now returns the inner callback directly
         return (hydratedState, error) => {
           if (error) {
             console.error("Failed to rehydrate state from storage:", error);
@@ -110,7 +111,8 @@ export const useAppStore = create<AppState>()(
             if (!hydratedState.userProfile) {
               hydratedState.userProfile = defaultUserProfile;
             }
-            if (hydratedState.location === undefined) {
+             // Ensure location is initialized if not in storage or is undefined
+            if (hydratedState.location === undefined) { // Check for undefined specifically
               hydratedState.location = null;
             }
           }
@@ -120,44 +122,6 @@ export const useAppStore = create<AppState>()(
   )
 );
 
-// Rehydrate default products and icons on load
-// This runs after zustand's own rehydration
-useAppStore.subscribe(
-  (state, prevState) => {
-    if (prevState.products.length === 0 && state.products.length === 0) { // Only on initial load if products are empty
-      const defaultProductsWithIcons = getDefaultProducts();
-       useAppStore.setState({ products: defaultProductsWithIcons });
-    } else {
-      // For existing products, ensure icons are correctly mapped if they were somehow lost or not set
-      const defaultMap = new Map(getDefaultProducts().map(p => [p.id, p.icon]));
-      const needsIconUpdate = state.products.some(p => 
-        (!p.isCustom && defaultMap.has(p.id) && typeof p.icon !== 'function') || 
-        (p.isCustom && typeof p.icon !== 'function')
-      );
-
-      if (needsIconUpdate) {
-        useAppStore.setState(s => ({
-          products: s.products.map(p => {
-            if (!p.isCustom && defaultMap.has(p.id) && typeof p.icon !== 'function') {
-              return { ...p, icon: defaultMap.get(p.id) };
-            }
-            if (p.isCustom && typeof p.icon !== 'function') {
-              return { ...p, icon: ShoppingBasket }; // Default for custom
-            }
-            return p;
-          })
-        }));
-      }
-    }
-  }
-);
-
-// Initialize userProfile if it's not properly set after hydration
-const initialUserProfile = useAppStore.getState().userProfile;
-if (!initialUserProfile || Object.keys(initialUserProfile).length === 0) {
-  useAppStore.setState({ userProfile: defaultUserProfile });
-}
-const initialLocation = useAppStore.getState().location;
-if (initialLocation === undefined) {
- useAppStore.setState({ location: null });
-}
+// The problematic subscribe block and standalone initializers have been removed.
+// products are initialized via getDefaultProducts() and are not persisted, so they are always fresh.
+// userProfile and location are handled by onRehydrateStorage for defaults if missing from persisted state.
