@@ -7,29 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppStore } from "@/lib/store";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, CheckCircle, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function SalaryInputPage() {
-  const { hourlyWage, setHourlyWage, products, location, setLocation } = useAppStore();
+  const { hourlyWage, setHourlyWage, location, setLocation } = useAppStore();
   const [wageInputValue, setWageInputValue] = React.useState<string>(hourlyWage?.toString() || "");
   const [locationInputValue, setLocationInputValue] = React.useState<string>(location || "");
 
   const router = useRouter();
   const { toast } = useToast();
-
-  React.useEffect(() => {
-    // Products check is less critical if this is the first page, 
-    // but good to keep if flow could somehow bypass it.
-    // For a strict Salary -> Products flow, this might be removable or adjusted.
-    if (products.length === 0 && router.pathname !== '/products') { // Added condition to prevent loop if products page itself has an issue
-      // This check might be less relevant if salary is truly the first page
-      // and products are always populated by default or on the products page.
-    }
-  }, [products, router, toast]);
 
   const handleWageInputBlur = () => {
     const wage = parseFloat(wageInputValue);
@@ -130,7 +119,6 @@ export default function SalaryInputPage() {
             )}
           </CardContent>
           <CardFooter className="flex justify-end mt-4 pt-4 border-t">
-            {/* Previous Step button removed as this is the first page in the new flow */}
             <Button 
               onClick={handleNextStep} 
               disabled={hourlyWage === null || hourlyWage <= 0} 
