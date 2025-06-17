@@ -60,7 +60,7 @@ export default function SalaryInputPage() {
       });
       return;
     }
-    router.push("/products");
+    router.push("/results"); // Changed from /products to /results
   };
 
   return (
@@ -125,7 +125,7 @@ export default function SalaryInputPage() {
               className="bg-accent hover:bg-accent/90 w-full sm:w-auto text-base"
               size="lg"
             >
-              Next Step → Set Product Prices
+              Next Step → View Results 
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>
