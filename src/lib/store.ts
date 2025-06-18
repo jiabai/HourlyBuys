@@ -1,6 +1,7 @@
 
 "use client";
 
+import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Product, HistoryEntry, CalculationResult, UserProfile } from '@/lib/types';
@@ -50,7 +51,7 @@ export const useAppStore = create<AppState>()(
       addProduct: (productData) => {
         const newProduct: Product = {
           ...productData,
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           isCustom: true,
           icon: ShoppingBasket,
         };
@@ -71,7 +72,7 @@ export const useAppStore = create<AppState>()(
       history: [],
       addHistoryEntry: (entryData) => {
         const newEntry: HistoryEntry = {
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           timestamp: Date.now(),
           location: get().location, // Include location
           ...entryData,

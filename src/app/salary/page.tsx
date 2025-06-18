@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAppStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, DollarSign, MapPin } from "lucide-react"; // Changed Coins to DollarSign
+import { ArrowRight, DollarSign, MapPin, Loader2 } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -17,6 +17,7 @@ export default function SalaryInputPage() {
   const [wageInputValue, setWageInputValue] = React.useState<string>(hourlyWage?.toString() || "");
   const [locationInputValue, setLocationInputValue] = React.useState<string>(location || "");
   const [showManualLocationInput, setShowManualLocationInput] = React.useState<boolean>(!!location);
+  const [isDetectingLocation, setIsDetectingLocation] = React.useState(false);
 
   const router = useRouter();
   const { toast } = useToast();
@@ -64,22 +65,57 @@ export default function SalaryInputPage() {
   };
 
   const handleAutoLocation = () => {
-    toast({
-      title: "Feature in development",
-      description: "Automatic location detection will be available soon.",
-    });
-    if (!showManualLocationInput) {
+    if (!navigator.geolocation) {
+      toast({
+        title: "Geolocation Not Supported",
+        description: "Your browser does not support geolocation.",
+        variant: "destructive",
+      });
       setShowManualLocationInput(true);
+      return;
     }
+
+    setIsDetectingLocation(true);
+    setShowManualLocationInput(true); 
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const detectedLocation = `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`;
+        setLocationInputValue(detectedLocation);
+        setLocation(detectedLocation);
+        toast({
+          title: "Location Detected",
+          description: "Your approximate location (coordinates) has been set.",
+        });
+        setIsDetectingLocation(false);
+      },
+      (error) => {
+        let description = "Could not retrieve your location.";
+        if (error.code === error.PERMISSION_DENIED) {
+          description = "Location permission denied. Please enable it in your browser settings or enter manually.";
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          description = "Location information is unavailable. Please enter manually.";
+        } else if (error.code === error.TIMEOUT) {
+          description = "The request to get user location timed out. Please enter manually.";
+        }
+        toast({
+          title: "Location Error",
+          description: description,
+          variant: "destructive",
+        });
+        setIsDetectingLocation(false);
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
   };
 
   return (
     <AppLayout>
       <div className="flex flex-col items-center pt-8 md:pt-12 pb-8 w-full max-w-md mx-auto">
-        {/* Custom Logo and Title */}
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full purple-pink-gradient shadow-md">
-            <DollarSign className="w-8 h-8 md:w-10 md:h-10 text-white opacity-90" /> 
+            <DollarSign className="w-8 h-8 md:w-10 md:h-10 text-white opacity-90" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">
             Your Purchasing Power
@@ -97,11 +133,16 @@ export default function SalaryInputPage() {
                 variant="outline"
                 className="w-full mt-2 bg-muted/50 hover:bg-muted/70 text-foreground justify-start"
                 onClick={handleAutoLocation}
+                disabled={isDetectingLocation}
               >
-                <MapPin className="mr-2 h-4 w-4" />
-                Auto-detect Current Location
+                {isDetectingLocation ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <MapPin className="mr-2 h-4 w-4" />
+                )}
+                {isDetectingLocation ? "Detecting..." : "Auto-detect Current Location"}
               </Button>
-              {!showManualLocationInput && (
+              {!showManualLocationInput && !isDetectingLocation && (
                 <Button
                   variant="link"
                   className="text-sm mt-2 p-0 h-auto text-primary"
@@ -116,7 +157,7 @@ export default function SalaryInputPage() {
                    <Input
                     id="manual-location"
                     type="text"
-                    placeholder="e.g., Shanghai, London"
+                    placeholder="e.g., Shanghai or Lat: 31.23, Lon: 121.47"
                     value={locationInputValue}
                     onChange={handleLocationInputChange}
                     className="text-base h-11"
@@ -132,7 +173,7 @@ export default function SalaryInputPage() {
               <Input
                 id="hourly-wage"
                 type="number"
-                placeholder="500"
+                placeholder="e.g., 50.00"
                 value={wageInputValue}
                 onChange={(e) => setWageInputValue(e.target.value)}
                 onBlur={handleWageInputBlur}
@@ -143,9 +184,9 @@ export default function SalaryInputPage() {
             </div>
 
             {hourlyWage !== null && hourlyWage > 0 && (
-              <div 
+              <div
                 className="p-3 md:p-4 rounded-lg text-center shadow-sm"
-                style={{ backgroundColor: 'hsl(var(--quick-summary-hourly-wage-bg))' }} 
+                style={{ backgroundColor: 'hsl(var(--quick-summary-hourly-wage-bg))' }}
               >
                 <span className="text-sm md:text-base font-medium" style={{color: 'hsl(145 50% 40%)'}}>
                   Your after-tax hourly wage is: <strong className="text-base md:text-lg">¥{hourlyWage.toFixed(2)}/hour</strong>
@@ -160,7 +201,7 @@ export default function SalaryInputPage() {
               className="w-full bg-blue-600 hover:bg-blue-700 text-base text-white"
               size="lg"
             >
-              Next Step → View Purchasing Power →
+              Next Step → View Purchasing Power
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </CardFooter>
