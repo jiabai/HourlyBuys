@@ -8,6 +8,7 @@ import { useAppStore } from "@/lib/store";
 import type { CalculationResult, Product } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import html2canvas from 'html2canvas';
 import { ArrowLeft, RefreshCcw, Download, Share2, History, TrendingUp, Package, AlertTriangle } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,8 +41,7 @@ export default function ResultsPage() {
     setResults(calculatedResults);
     
     const { sanityCheckAnomalies: currentSanityCheckAnomalies } = useAppStore.getState().history[0] || {};
-    addHistoryEntry({ hourlyWage, products, results: calculatedResults, location, sanityCheckAnomalies: currentSanityCheckAnomalies });
-
+    addHistoryEntry({ hourlyWage, products, results: calculatedResults, sanityCheckAnomalies: currentSanityCheckAnomalies });
 
   }, [hourlyWage, products, addHistoryEntry, router, toast, location]);
 
@@ -62,12 +62,54 @@ export default function ResultsPage() {
   }, [results]);
 
 
+    
   const handleSaveAsImage = async () => {
-    toast({
-      title: "Feature In Development",
-      description: "'Save as Image' functionality will be implemented soon.",
-    });
+    if (!chartRef.current) {
+      toast({
+        title: "Save Failed",
+        description: "Could not find chart element. Please try again later.",
+        variant: "destructive",
+      });
+      return;
+    }
+  
+    try {
+      // Show loading status
+      toast({
+        title: "Generating Image...",
+        description: "Please wait while we prepare your chart image.",
+      });
+  
+      // Capture chart with html2canvas
+      const canvas = await html2canvas(chartRef.current, {
+        scale: window.devicePixelRatio, // Improve image quality
+        useCORS: true,
+        logging: false
+      });
+  
+      // Create download link
+      const imageUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = `Purchasing-Power-Analysis_${new Date().toLocaleDateString()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  
+      toast({
+        title: "Image Saved",
+        description: "Chart has been successfully saved to your device.",
+      });
+    } catch (error) {
+      console.error("Image save failed:", error);
+      toast({
+        title: "Save Failed",
+        description: "An error occurred while generating the image. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
+
 
   const handleShare = async () => {
      if (navigator.share) {
@@ -236,4 +278,3 @@ export default function ResultsPage() {
     </AppLayout>
   );
 }
-
