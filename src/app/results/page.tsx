@@ -171,21 +171,29 @@ export default function ResultsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {results.map((item, index) => (
-                  <TableRow 
-                    key={item.id} 
-                    className={index % 2 !== 0 ? 'bg-[hsl(var(--table-row-alt-bg))]' : ''}
-                  >
-                    <TableCell className="font-medium p-2 md:p-4">{item.name}</TableCell>
-                    <TableCell className="p-2 md:p-4">{item.unit}</TableCell>
-                    <TableCell className="text-right p-2 md:p-4">¥{item.price.toFixed(2)}</TableCell>
-                    <TableCell className="text-right font-semibold text-primary p-2 md:p-4">
-                      {isFinite(item.quantityPurchasable) 
-                        ? `${item.quantityPurchasable.toFixed(2)} ${item.unit.split('/')[1] || ''}` 
-                        : (item.price === 0 ? '∞ (Free!)' : 'N/A')}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {results.map((item, index) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <TableRow 
+                      key={item.id} 
+                      className={index % 2 !== 0 ? 'bg-[hsl(var(--table-row-alt-bg))]' : ''}
+                    >
+                      <TableCell className="font-medium p-2 md:p-4">
+                        <div className="flex items-center gap-2">
+                          {IconComponent && <IconComponent className="h-5 w-5 text-primary" />}
+                          <span>{item.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="p-2 md:p-4">{item.unit}</TableCell>
+                      <TableCell className="text-right p-2 md:p-4">¥{item.price.toFixed(2)}</TableCell>
+                      <TableCell className="text-right font-semibold text-primary p-2 md:p-4">
+                        {isFinite(item.quantityPurchasable) 
+                          ? `${item.quantityPurchasable.toFixed(2)} ${item.unit.split('/')[1] || ''}` 
+                          : (item.price === 0 ? '∞ (Free!)' : 'N/A')}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
@@ -228,3 +236,4 @@ export default function ResultsPage() {
     </AppLayout>
   );
 }
+
