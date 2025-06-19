@@ -17,7 +17,6 @@ RUN adduser --system --uid 1001 nextjs
 
 # 复制必要文件
 COPY --from=builder /app/next.config.ts ./
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
@@ -29,6 +28,4 @@ RUN chown -R nextjs:nodejs /app/.next
 USER nextjs
 
 EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget -qO- http://localhost:3000/api/health || exit 1
 CMD ["npm", "start"]
