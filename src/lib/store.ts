@@ -5,10 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Product, HistoryEntry, CalculationResult, UserProfile } from '@/lib/types';
-import { Leaf, Wheat, Droplet, Beef, Egg, Milk, ShoppingBasket } from 'lucide-react';
+import { Leaf, Wheat, Droplet, Beef, Egg, Milk, Crown } from 'lucide-react';
 import type { PriceSanityCheckOutput } from '@/ai/flows/price-sanity-check';
 
 const getDefaultProducts = (): Product[] => [
+  { id: 'labubu', name: 'labubu', unit: 'CNY/piece', price: 200.0, icon: Crown },
   { id: 'rice', name: 'Rice', unit: 'CNY/jin', price: 2.5, icon: Leaf },
   { id: 'flour', name: 'Flour', unit: 'CNY/jin', price: 3.0, icon: Wheat },
   { id: 'cooking-oil', name: 'Cooking Oil', unit: 'CNY/liter', price: 8.0, icon: Droplet },

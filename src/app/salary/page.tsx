@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAppStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, DollarSign, MapPin, Loader2 } from "lucide-react";
+import { ArrowRight, MapPin, Loader2, JapaneseYen } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import AppLayout from '@/components/layout/AppLayout';
 
@@ -115,7 +115,7 @@ export default function SalaryInputPage() {
       <div className="flex flex-col items-center pt-8 md:pt-12 pb-8 w-full max-w-md mx-auto">
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full purple-pink-gradient shadow-md">
-            <DollarSign className="w-8 h-8 md:w-10 md:h-10 text-white opacity-90" />
+            <JapaneseYen className="w-8 h-8 md:w-10 md:h-10 text-white opacity-90" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">
             Your Purchasing Power

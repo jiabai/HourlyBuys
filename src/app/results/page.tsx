@@ -9,7 +9,7 @@ import type { CalculationResult, Product } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from 'html2canvas';
-import { ArrowLeft, RefreshCcw, Download, Share2, History, TrendingUp, Package, AlertTriangle } from "lucide-react";
+import { ArrowLeft, RefreshCcw, Download, Share2, History, TrendingUp, BadgeJapaneseYen } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { PurchasingPowerChart } from "@/components/results/PurchasingPowerChart";
@@ -148,7 +148,10 @@ export default function ResultsPage() {
   return (
     <AppLayout> 
       <div className="purple-pink-gradient text-primary-foreground p-4 md:p-6 rounded-lg shadow-md mb-6 text-center">
-        <h1 className="text-xl md:text-3xl font-bold">Your Purchasing Power Analysis</h1>
+        <h1 className="text-xl md:text-3xl font-bold flex items-center justify-center">
+          <BadgeJapaneseYen className="mr-2 h-6 w-6" />
+          Your Purchasing Power Analysis
+        </h1>
         {hourlyWage !== null && (
           <p className="text-sm md:text-lg mt-1">
             Based on your hourly wage of <strong className="font-semibold">¥{hourlyWage.toFixed(2)}</strong>/hour
